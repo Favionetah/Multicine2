@@ -1,0 +1,16 @@
+{
+    "name": "proyecto-eddys/multicine",
+    "description": "Sistema de Gestión Cinematográfica Multicine",
+    "type": "project",
+    "require": {
+        "php": ">=8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Config\\": "config/",
+            "App\\Models\\": "src/Models/",
+            "App\\Controllers\\": "src/Controllers/",
+            "App\\Repositories\\": "src/Repositories/"
+        }
+    }
+}
