@@ -30,7 +30,7 @@ class FuncionRepository {
         // 2. Usamos :horaInicio2 para no confundir a PDO
         $sql = "INSERT INTO funciones (idPelicula, idSala, fechaFuncion, horaInicio, horaFin, precioBase) 
                 VALUES (:idPelicula, :idSala, :fecha, :horaInicio, ADDTIME(:horaInicio2, '02:00:00'), :precio)";
-        
+
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             ':idPelicula'  => $datos['idPelicula'],
@@ -56,8 +56,10 @@ class FuncionRepository {
         $sqlCheck = "SELECT * FROM funciones WHERE idSala = :idSala AND fechaFuncion = :fecha AND horaInicio = :hora AND idFuncion != :id";
         $stmtCheck = $this->db->prepare($sqlCheck);
         $stmtCheck->execute([
-            ':idSala' => $datos['idSala'], ':fecha' => $datos['fechaFuncion'],
-            ':hora' => $datos['horaInicio'], ':id' => $datos['idFuncion']
+            ':idSala' => $datos['idSala'],
+            ':fecha' => $datos['fechaFuncion'],
+            ':hora' => $datos['horaInicio'],
+            ':id' => $datos['idFuncion']
         ]);
 
         if ($stmtCheck->rowCount() > 0) {
@@ -67,12 +69,15 @@ class FuncionRepository {
         $sql = "UPDATE funciones SET idPelicula = :idPelicula, idSala = :idSala, fechaFuncion = :fecha, 
                 horaInicio = :horaInicio, horaFin = ADDTIME(:horaInicio2, '02:00:00'), precioBase = :precio 
                 WHERE idFuncion = :id";
-        
+
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
-            ':idPelicula'  => $datos['idPelicula'], ':idSala'      => $datos['idSala'],
-            ':fecha'       => $datos['fechaFuncion'], ':horaInicio'  => $datos['horaInicio'],
-            ':horaInicio2' => $datos['horaInicio'], ':precio'      => $datos['precioBase'],
+            ':idPelicula'  => $datos['idPelicula'],
+            ':idSala'      => $datos['idSala'],
+            ':fecha'       => $datos['fechaFuncion'],
+            ':horaInicio'  => $datos['horaInicio'],
+            ':horaInicio2' => $datos['horaInicio'],
+            ':precio'      => $datos['precioBase'],
             ':id'          => $datos['idFuncion']
         ]);
     }
@@ -89,24 +94,24 @@ class FuncionRepository {
         $sql = "SELECT f.idFuncion as id, p.titulo, p.imagenPoster as imagen, 
                        f.horaInicio as hora, f.fechaFuncion as fecha, s.nombre as sala, 
                        s.filas, s.columnas, s.tipo as tipoSala,
-                       f.boletos_vendidos, s.capacidad, f.precioBase as precio,
+                       f.boletos_vendidos, s.capacidadTotal, f.precioBase as precio,
                        f.asientos_vendidos
                 FROM funciones f
                 JOIN peliculas p ON f.idPelicula = p.idPelicula
                 JOIN salas s ON f.idSala = s.idSala
                 ORDER BY f.fechaFuncion ASC, f.horaInicio ASC";
-        
+
         $stmt = $this->db->query($sql);
         $data = [];
-        
-        while($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             $vendidos = (int)$row['boletos_vendidos'];
-            $capacidad = (int)$row['capacidad'];
-            
-            $row['disponibles'] = $capacidad - $vendidos;
+            $capacidadTotal = (int)$row['capacidadTotal'];
+
+            $row['disponibles'] = $capacidadTotal - $vendidos;
             $row['llena'] = ($row['disponibles'] <= 0);
             $row['imagen'] = str_starts_with($row['imagen'], 'http') ? $row['imagen'] : 'img/' . $row['imagen'];
-            
+
             $data[] = $row;
         }
         return $data;
@@ -141,7 +146,7 @@ class FuncionRepository {
             ':id' => $datos['idFuncion']
         ]);
     }
-    
+
     public function registrarCompraCliente(array $datos): string {
         // 1. Verificamos y ocupamos los asientos en la función
         $stmt = $this->db->prepare("SELECT asientos_vendidos, boletos_vendidos FROM funciones WHERE idFuncion = :id");
@@ -165,9 +170,9 @@ class FuncionRepository {
         $upd->execute([':cant' => $cantidadTotal, ':asientos' => $asientosStr, ':id' => $datos['idFuncion']]);
 
         // 2. Generamos el Código Único Aleatorio (Ej. TK-A4F8B)
-        $codigoTicket = 'TK-' . strtoupper(substr(uniqid(), -5)); 
+        $codigoTicket = 'TK-' . strtoupper(substr(uniqid(), -5));
         $asientosCompradosStr = implode(', ', $nuevosAsientos);
-        
+
         // 3. Guardamos la compra en el historial del cliente
         $ins = $this->db->prepare("INSERT INTO compras (CI_cliente, idFuncion, asientos, total, codigo_ticket) VALUES (:ci, :idF, :asientos, :total, :codigo)");
         $ins->execute([
