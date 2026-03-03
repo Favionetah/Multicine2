@@ -90,8 +90,9 @@ class FuncionRepository {
     }
 
     public function obtenerCarteleraCajero(): array {
-        // Traemos todo: película, sala, dimensiones y asientos vendidos
+        // Agregamos p.sinopsis, p.genero, p.duracion, p.clasificacion, p.idioma a la consulta
         $sql = "SELECT f.idFuncion as id, p.titulo, p.imagenPoster as imagen, 
+                       p.sinopsis, p.genero, p.duracion, p.clasificacion, p.idioma,
                        f.horaInicio as hora, f.fechaFuncion as fecha, s.nombre as sala, 
                        s.filas, s.columnas, s.tipo as tipoSala,
                        f.boletos_vendidos, s.capacidadTotal, f.precioBase as precio,
@@ -105,11 +106,14 @@ class FuncionRepository {
         $data = [];
 
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-            $vendidos = (int)$row['boletos_vendidos'];
-            $capacidadTotal = (int)$row['capacidadTotal'];
+            $vendidos = (int)($row['boletos_vendidos'] ?? 0);
+            
+            // Fix de salas antiguas o nuevas
+            $capacidadTotal = !empty($row['capacidadTotal']) ? (int)$row['capacidadTotal'] : ((int)$row['filas'] * (int)$row['columnas']);
 
             $row['disponibles'] = $capacidadTotal - $vendidos;
             $row['llena'] = ($row['disponibles'] <= 0);
+            
             $row['imagen'] = str_starts_with($row['imagen'], 'http') ? $row['imagen'] : 'img/' . $row['imagen'];
 
             $data[] = $row;
@@ -118,37 +122,49 @@ class FuncionRepository {
     }
 
     public function registrarVenta(array $datos): bool {
-        // 1. Buscamos los asientos que ya estaban vendidos
-        $stmt = $this->db->prepare("SELECT asientos_vendidos, boletos_vendidos FROM funciones WHERE idFuncion = :id");
+        // --- FLUJO DEL CAJERO (Funciones + Compras) ---
+        
+        // 1. Buscamos la función para ver los asientos y el precio
+        $stmt = $this->db->prepare("SELECT precioBase, asientos_vendidos, boletos_vendidos FROM funciones WHERE idFuncion = :id");
         $stmt->execute([':id' => $datos['idFuncion']]);
         $funcion = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         $vendidosActuales = $funcion['asientos_vendidos'] ? explode(',', $funcion['asientos_vendidos']) : [];
         $nuevosAsientos = $datos['asientos'];
 
-        // 2. Verificamos que nadie nos haya ganado el asiento en el último segundo
         foreach ($nuevosAsientos as $asiento) {
             if (in_array($asiento, $vendidosActuales)) {
                 throw new \Exception("El asiento $asiento ya fue vendido a otra persona.");
             }
         }
 
-        // 3. Unimos los viejos con los nuevos y sumamos la cantidad
         $todosLosAsientos = array_merge($vendidosActuales, $nuevosAsientos);
         $asientosStr = implode(',', $todosLosAsientos);
         $cantidadTotal = $funcion['boletos_vendidos'] + count($nuevosAsientos);
 
-        // 4. Actualizamos la base de datos
+        // 2. ACTUALIZAR TABLA: funciones
         $upd = $this->db->prepare("UPDATE funciones SET boletos_vendidos = :cant, asientos_vendidos = :asientos WHERE idFuncion = :id");
-        return $upd->execute([
-            ':cant' => $cantidadTotal,
-            ':asientos' => $asientosStr,
-            ':id' => $datos['idFuncion']
+        $upd->execute([':cant' => $cantidadTotal, ':asientos' => $asientosStr, ':id' => $datos['idFuncion']]);
+
+        // 3. INSERTAR EN TABLA: compras
+        $total = count($nuevosAsientos) * $funcion['precioBase']; // Calculamos el total
+        $codigoTicket = 'CJ-' . strtoupper(substr(uniqid(), -5)); // CJ = Cajero
+        $ciCliente = $datos['ciCliente'] ?? '0'; // Si el cajero no anota el CI, va 0
+
+        $insCompra = $this->db->prepare("INSERT INTO compras (CI_cliente, idFuncion, asientos, total, codigo_ticket) VALUES (:ci, :idF, :asientos, :total, :codigo)");
+        return $insCompra->execute([
+            ':ci' => $ciCliente,
+            ':idF' => $datos['idFuncion'],
+            ':asientos' => implode(', ', $nuevosAsientos),
+            ':total' => $total,
+            ':codigo' => $codigoTicket
         ]);
     }
 
     public function registrarCompraCliente(array $datos): string {
-        // 1. Verificamos y ocupamos los asientos en la función
+        // --- FLUJO DEL CLIENTE ONLINE (Funciones + Reservas + Compras) ---
+        
+        // 1. Buscamos asientos
         $stmt = $this->db->prepare("SELECT asientos_vendidos, boletos_vendidos FROM funciones WHERE idFuncion = :id");
         $stmt->execute([':id' => $datos['idFuncion']]);
         $funcion = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -166,16 +182,24 @@ class FuncionRepository {
         $asientosStr = implode(',', $todosLosAsientos);
         $cantidadTotal = $funcion['boletos_vendidos'] + count($nuevosAsientos);
 
+        // 2. ACTUALIZAR TABLA: funciones
         $upd = $this->db->prepare("UPDATE funciones SET boletos_vendidos = :cant, asientos_vendidos = :asientos WHERE idFuncion = :id");
         $upd->execute([':cant' => $cantidadTotal, ':asientos' => $asientosStr, ':id' => $datos['idFuncion']]);
 
-        // 2. Generamos el Código Único Aleatorio (Ej. TK-A4F8B)
-        $codigoTicket = 'TK-' . strtoupper(substr(uniqid(), -5));
+        // 3. INSERTAR EN TABLA: reservas
+        $insReserva = $this->db->prepare("INSERT INTO reservas (CICliente, idFuncion, estado, montoTotal) VALUES (:ci, :idF, 'confirmada', :total)");
+        $insReserva->execute([
+            ':ci' => $datos['CI'],
+            ':idF' => $datos['idFuncion'],
+            ':total' => $datos['total']
+        ]);
+
+        // 4. INSERTAR EN TABLA: compras
+        $codigoTicket = 'TK-' . strtoupper(substr(uniqid(), -5)); // TK = Ticket Online
         $asientosCompradosStr = implode(', ', $nuevosAsientos);
 
-        // 3. Guardamos la compra en el historial del cliente
-        $ins = $this->db->prepare("INSERT INTO compras (CI_cliente, idFuncion, asientos, total, codigo_ticket) VALUES (:ci, :idF, :asientos, :total, :codigo)");
-        $ins->execute([
+        $insCompra = $this->db->prepare("INSERT INTO compras (CI_cliente, idFuncion, asientos, total, codigo_ticket) VALUES (:ci, :idF, :asientos, :total, :codigo)");
+        $insCompra->execute([
             ':ci' => $datos['CI'],
             ':idF' => $datos['idFuncion'],
             ':asientos' => $asientosCompradosStr,

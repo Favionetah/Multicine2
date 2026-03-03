@@ -66,7 +66,14 @@ class FuncionController {
             $asientos = json_decode($datos['asientos'], true);
             if (empty($asientos)) throw new \Exception("Debe seleccionar al menos un asiento.");
 
-            if ($this->repository->registrarVenta(['idFuncion' => $datos['idFuncion'], 'asientos' => $asientos])) {
+            // Agrupamos los datos incluyendo el CI del cliente si lo enviaron
+            $datosVenta = [
+                'idFuncion' => $datos['idFuncion'],
+                'asientos' => $asientos,
+                'ciCliente' => $datos['ciCliente'] ?? '0' 
+            ];
+
+            if ($this->repository->registrarVenta($datosVenta)) {
                 return ["status" => "success", "message" => "Venta completada."];
             }
             throw new \Exception("Error al registrar la venta.");
@@ -101,4 +108,6 @@ class FuncionController {
         $ci = $_SESSION['CI'] ?? '';
         return $this->repository->obtenerHistorialCliente($ci);
     }
+
+    
 }

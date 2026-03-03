@@ -329,6 +329,8 @@ $nombreEmpleadoReal = $_SESSION['nombre'] ?? 'Empleado Desconocido';
             formData.append('action', 'vender_boletos');
             formData.append('idFuncion', funcionSeleccionadaId);
             formData.append('asientos', JSON.stringify(asientosSeleccionados));
+            
+            formData.append('ciCliente', ciCliente);
 
             fetch('api.php', { method: 'POST', body: formData })
             .then(res => res.json())
