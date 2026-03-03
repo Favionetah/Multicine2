@@ -16,86 +16,505 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
 
-        :root { --primary: #00d2d3; --dark-bg: #050505; --card-bg: #111; --danger: #ff4757; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-        body { background: var(--dark-bg); color: white; padding-bottom: 50px; }
+        :root {
+            --primary: #00d2d3;
+            --dark-bg: #050505;
+            --card-bg: #111;
+            --danger: #ff4757;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: white;
+            padding-bottom: 50px;
+        }
 
         /* HEADER Y HERO */
-        header { padding: 20px 50px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: rgba(10, 10, 10, 0.95); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
-        .logo { color: var(--primary); font-weight: 900; font-size: 1.5rem; text-decoration: none; display: flex; align-items: center; gap: 10px; }
-        .user-menu { display: flex; align-items: center; gap: 20px; }
-        .user-name { font-weight: 600; color: #aaa; }
-        
-        .btn-logout { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.3s; font-size: 0.8rem; }
-        .btn-logout:hover { background: var(--danger); color: white; }
-        .btn-historial { background: var(--primary); color: black; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.3s; font-size: 0.8rem; border: 1px solid var(--primary); }
-        .btn-historial:hover { background: transparent; color: var(--primary); }
+        header {
+            padding: 20px 50px;
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
 
-        nav ul { display: flex; list-style: none; gap: 40px; margin: 0 auto; }
-        nav ul li a { text-decoration: none; color: #aaa; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: 0.3s; }
-        nav ul li a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        .logo {
+            color: var(--primary);
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-        .hero { padding: 40px 50px 20px; text-align: center; }
-        .hero h1 { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; margin-bottom: 10px; }
-        .hero p { color: #888; margin-bottom: 30px; }
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #aaa;
+        }
+
+        .btn-logout {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-historial {
+            background: var(--primary);
+            color: black;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            font-size: 0.8rem;
+            border: 1px solid var(--primary);
+        }
+
+        .btn-historial:hover {
+            background: transparent;
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+            margin: 0 auto;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #aaa;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .hero {
+            padding: 40px 50px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #888;
+            margin-bottom: 30px;
+        }
 
         /* CALENDARIO */
-        .date-scroller { display: flex; gap: 15px; overflow-x: auto; padding: 10px 50px 20px; justify-content: center; }
-        .date-btn { background: #111; border: 1px solid #333; padding: 15px 25px; border-radius: 12px; cursor: pointer; transition: 0.3s; text-align: center; min-width: 100px; }
-        .date-btn span { display: block; }
-        .date-btn .d-day { font-size: 0.7rem; color: #888; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
-        .date-btn .d-date { font-size: 1.2rem; color: white; font-weight: 900; }
-        .date-btn:hover { background: #222; border-color: #555; }
-        .date-btn.active { background: var(--primary); border-color: var(--primary); box-shadow: 0 5px 20px rgba(0, 210, 211, 0.3); }
-        .date-btn.active .d-day, .date-btn.active .d-date { color: black; }
+        .date-scroller {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 50px 20px;
+            justify-content: center;
+        }
+
+        .date-btn {
+            background: #111;
+            border: 1px solid #333;
+            padding: 15px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .date-btn span {
+            display: block;
+        }
+
+        .date-btn .d-day {
+            font-size: 0.7rem;
+            color: #888;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .date-btn .d-date {
+            font-size: 1.2rem;
+            color: white;
+            font-weight: 900;
+        }
+
+        .date-btn:hover {
+            background: #222;
+            border-color: #555;
+        }
+
+        .date-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 5px 20px rgba(0, 210, 211, 0.3);
+        }
+
+        .date-btn.active .d-day,
+        .date-btn.active .d-date {
+            color: black;
+        }
 
         /* GRID DE PELÍCULAS */
-        .movies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; padding: 20px 50px; max-width: 1400px; margin: 0 auto; }
-        .movie-card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid #222; transition: 0.3s; display: flex; flex-direction: column; }
-        .movie-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); border-color: #444; }
-        .m-poster { width: 100%; height: 400px; object-fit: cover; border-bottom: 3px solid var(--primary); }
-        .m-info { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-        .m-title { font-size: 1.4rem; font-weight: 900; text-transform: uppercase; margin-bottom: 15px; line-height: 1.2; }
-        .functions-area { margin-top: auto; }
-        .f-label { font-size: 0.7rem; color: #888; font-weight: bold; margin-bottom: 10px; display: block; text-transform: uppercase; }
-        .f-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
-        
-        .btn-time { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 80px; }
-        .btn-time .t-hora { font-size: 1.1rem; color: var(--primary); }
-        .btn-time .t-sala { font-size: 0.65rem; color: #aaa; margin-top: 3px; }
-        .btn-time:hover { background: var(--primary); border-color: var(--primary); }
-        .btn-time:hover .t-hora, .btn-time:hover .t-sala { color: black; }
-        .btn-time.agotado { background: #111; border-color: #222; cursor: not-allowed; opacity: 0.5; }
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 40px;
+            padding: 20px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .movie-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            border-color: #444;
+        }
+
+        .m-poster {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .m-info {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .m-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .functions-area {
+            margin-top: auto;
+        }
+
+        .f-label {
+            font-size: 0.7rem;
+            color: #888;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .f-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-time {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+        }
+
+        .btn-time .t-hora {
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .btn-time .t-sala {
+            font-size: 0.65rem;
+            color: #aaa;
+            margin-top: 3px;
+        }
+
+        .btn-time:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-time:hover .t-hora,
+        .btn-time:hover .t-sala {
+            color: black;
+        }
+
+        .btn-time.agotado {
+            background: #111;
+            border-color: #222;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
 
         /* NUEVO BOTÓN INFO ACCIÓN (Grande y cuadrado) */
-        .btn-info-action { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 900; transition: 0.3s; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; letter-spacing: 0.5px; text-transform: uppercase; gap: 8px; min-width: 150px; }
-        .btn-info-action:hover { background: var(--primary); color: black; box-shadow: 0 0 15px rgba(0,210,211,0.5); }
+        .btn-info-action {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 900;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            gap: 8px;
+            min-width: 150px;
+        }
+
+        .btn-info-action:hover {
+            background: var(--primary);
+            color: black;
+            box-shadow: 0 0 15px rgba(0, 210, 211, 0.5);
+        }
 
         /* MODALES */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 500; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-overlay.active { display: flex; }
-        .modal-content { width: 95%; max-width: 1000px; background: #121212; border-radius: 20px; border: 1px solid #333; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); }
-        .modal-header { padding: 20px 30px; background: #1a1a1a; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
-        
-        .modal-body-split { display: flex; flex-wrap: wrap; }
-        .map-section { flex: 2; padding: 30px; border-right: 1px solid #222; min-width: 300px; overflow-x: auto; display: flex; flex-direction: column; align-items: center; }
-        .pay-section { flex: 1; padding: 30px; background: #0a0a0a; min-width: 300px; }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 95%;
+            max-width: 1000px;
+            background: #121212;
+            border-radius: 20px;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-header {
+            padding: 20px 30px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body-split {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .map-section {
+            flex: 2;
+            padding: 30px;
+            border-right: 1px solid #222;
+            min-width: 300px;
+            overflow-x: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pay-section {
+            flex: 1;
+            padding: 30px;
+            background: #0a0a0a;
+            min-width: 300px;
+        }
 
         /* ASIENTOS */
-        .screen-display { width: 80%; height: 40px; background: linear-gradient(180deg, #fff, transparent); margin: 0 auto 30px auto; border-radius: 50% 50% 0 0 / 20px 20px 0 0; text-align: center; color: black; font-weight: bold; line-height: 25px; letter-spacing: 5px; transform: perspective(600px) rotateX(-30deg); opacity: 0.8; }
-        .seat-row { display: flex; gap: 6px; align-items: center; justify-content: center; margin-bottom: 8px; }
-        .row-letter { color: var(--primary); font-weight: bold; width: 20px; text-align: right; margin-right: 10px; font-size: 0.8rem; }
-        .seat-icon { width: 25px; height: 25px; border-radius: 5px 5px 8px 8px; background-color: #333; cursor: pointer; transition: 0.2s; position: relative; color: white; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .seat-icon:hover { background-color: #555; transform: translateY(-3px); }
-        .seat-icon::after { content: ''; position: absolute; bottom: -2px; left: 2px; right: 2px; height: 3px; background: #222; border-radius: 2px; }
-        .seat-icon.selected { background-color: var(--primary) !important; color: black; transform: translateY(-5px); box-shadow: 0 0 10px var(--primary); }
-        .seat-icon.occupied { background-color: var(--danger) !important; color: transparent; cursor: not-allowed; opacity: 0.3; }
+        .screen-display {
+            width: 80%;
+            height: 40px;
+            background: linear-gradient(180deg, #fff, transparent);
+            margin: 0 auto 30px auto;
+            border-radius: 50% 50% 0 0 / 20px 20px 0 0;
+            text-align: center;
+            color: black;
+            font-weight: bold;
+            line-height: 25px;
+            letter-spacing: 5px;
+            transform: perspective(600px) rotateX(-30deg);
+            opacity: 0.8;
+        }
 
-        .form-input { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: white; border-radius: 8px; font-family: inherit; margin-bottom: 15px; }
-        .form-input:focus { border-color: var(--primary); outline: none; }
-        .btn-pay { width: 100%; padding: 15px; background: var(--primary); color: black; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; transition: 0.3s; font-size: 1rem; }
-        .btn-pay:hover { background: white; }
-        .btn-pay:disabled { background: #333; color: #666; cursor: not-allowed; }
+        .seat-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .row-letter {
+            color: var(--primary);
+            font-weight: bold;
+            width: 20px;
+            text-align: right;
+            margin-right: 10px;
+            font-size: 0.8rem;
+        }
+
+        .seat-icon {
+            width: 25px;
+            height: 25px;
+            border-radius: 5px 5px 8px 8px;
+            background-color: #333;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+            color: white;
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .seat-icon:hover {
+            background-color: #555;
+            transform: translateY(-3px);
+        }
+
+        .seat-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 2px;
+            right: 2px;
+            height: 3px;
+            background: #222;
+            border-radius: 2px;
+        }
+
+        .seat-icon.selected {
+            background-color: var(--primary) !important;
+            color: black;
+            transform: translateY(-5px);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .seat-icon.occupied {
+            background-color: var(--danger) !important;
+            color: transparent;
+            cursor: not-allowed;
+            opacity: 0.3;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 8px;
+            font-family: inherit;
+            margin-bottom: 15px;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-pay:hover {
+            background: white;
+        }
+
+        .btn-pay:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -130,20 +549,20 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
                 <img id="infoImagen" src="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.5;">
                 <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, #121212, transparent);"></div>
                 <button onclick="document.getElementById('infoModal').classList.remove('active')" style="position: absolute; top: 15px; right: 20px; background: rgba(0,0,0,0.6); border: 1px solid #555; color: white; font-size: 1.5rem; cursor: pointer; border-radius: 50%; width: 40px; height: 40px; z-index: 10;">&times;</button>
-                
+
                 <div style="position: absolute; bottom: 20px; left: 30px; z-index: 10; padding-right: 20px;">
                     <h2 id="infoTitulo" style="font-size: 2.2rem; text-transform: uppercase; font-weight: 900; margin:0; text-shadow: 0 5px 15px black;">Título</h2>
                     <span id="infoGenero" style="color: var(--primary); font-weight: 800; text-transform: uppercase; font-size: 0.9rem; text-shadow: 0 2px 5px black;">Género</span>
                 </div>
             </div>
-            
+
             <div style="padding: 30px;">
                 <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
                     <div style="background: #1a1a1a; border: 1px solid #333; padding: 10px 20px; border-radius: 10px; font-size: 0.85rem;"><i class="fas fa-clock" style="color:#aaa;"></i> <b id="infoDuracion" style="color:white; margin-left:5px;">0</b> min</div>
                     <div style="background: #1a1a1a; border: 1px solid #333; padding: 10px 20px; border-radius: 10px; font-size: 0.85rem;"><i class="fas fa-user-check" style="color:#aaa;"></i> <b id="infoClasificacion" style="color:white; margin-left:5px;">A</b></div>
                     <div style="background: #1a1a1a; border: 1px solid #333; padding: 10px 20px; border-radius: 10px; font-size: 0.85rem;"><i class="fas fa-language" style="color:#aaa;"></i> <b id="infoIdioma" style="color:white; margin-left:5px;">Español</b></div>
                 </div>
-                
+
                 <h4 style="color: #888; font-size: 0.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">SINOPSIS</h4>
                 <p id="infoSinopsis" style="color: #ccc; font-size: 0.95rem; line-height: 1.8; margin-bottom: 10px;"></p>
             </div>
@@ -166,9 +585,15 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
                     <div id="seatContainer" style="width: 100%;"></div>
 
                     <div style="display:flex; gap:15px; margin-top:30px; font-size:0.8rem; color:#888; font-weight:bold;">
-                        <div style="display:flex; align-items:center; gap:5px;"><div style="width:15px;height:15px;background:#333;border-radius:3px;"></div> Libre</div>
-                        <div style="display:flex; align-items:center; gap:5px;"><div style="width:15px;height:15px;background:var(--primary);border-radius:3px;"></div> Tu Selección</div>
-                        <div style="display:flex; align-items:center; gap:5px;"><div style="width:15px;height:15px;background:var(--danger);opacity:0.3;border-radius:3px;"></div> Ocupado</div>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <div style="width:15px;height:15px;background:#333;border-radius:3px;"></div> Libre
+                        </div>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <div style="width:15px;height:15px;background:var(--primary);border-radius:3px;"></div> Tu Selección
+                        </div>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <div style="width:15px;height:15px;background:var(--danger);opacity:0.3;border-radius:3px;"></div> Ocupado
+                        </div>
                     </div>
                 </div>
 
@@ -276,7 +701,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             for (const titulo in peliculasAgrupadas) {
                 const peli = peliculasAgrupadas[titulo];
                 let botonesHtml = '';
-                
+
                 peli.funciones.forEach(func => {
                     if (func.llena) botonesHtml += `<button class="btn-time agotado"><span class="t-hora">${func.hora.substring(0,5)}</span><span class="t-sala">${func.sala}</span></button>`;
                     else botonesHtml += `<button class="btn-time" onclick="abrirMapaAsientos(${func.id})"><span class="t-hora">${func.hora.substring(0,5)}</span><span class="t-sala">${func.sala}</span></button>`;
@@ -399,7 +824,8 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
                 const num = document.getElementById('cc_num').value;
                 const cvv = document.getElementById('cc_cvv').value;
                 if (num.length < 15 || cvv.length < 3) {
-                    alert("⚠️ Datos de tarjeta inválidos."); return;
+                    alert("⚠️ Datos de tarjeta inválidos.");
+                    return;
                 }
             }
 
@@ -411,7 +837,10 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
 
             document.getElementById('btnConfirmarCompra').textContent = "PROCESANDO...";
 
-            fetch('api.php', { method: 'POST', body: formData })
+            fetch('api.php', {
+                    method: 'POST',
+                    body: formData
+                })
                 .then(res => res.json())
                 .then(data => {
                     if (data.status === 'success') {
@@ -426,4 +855,5 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
         }
     </script>
 </body>
+
 </html>

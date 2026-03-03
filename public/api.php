@@ -6,11 +6,11 @@ header('Content-Type: application/json');
 error_reporting(E_ALL);
 ini_set('display_errors', '0');
 
-set_error_handler(function($errno, $errstr, $errfile, $errline) {
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
     echo json_encode(["status" => "error", "message" => "Error de PHP: $errstr en la línea $errline de $errfile"]);
     exit;
 });
-set_exception_handler(function($e) {
+set_exception_handler(function ($e) {
     echo json_encode(["status" => "error", "message" => "Fallo de PHP: " . $e->getMessage() . " en la línea " . $e->getLine()]);
     exit;
 });
@@ -26,8 +26,8 @@ use App\Repositories\UsuarioRepository;
 use App\Controllers\UsuarioController;
 use App\Repositories\PeliculaRepository;
 use App\Controllers\PeliculaController;
-use App\Repositories\FuncionRepository; 
-use App\Controllers\FuncionController;  
+use App\Repositories\FuncionRepository;
+use App\Controllers\FuncionController;
 use App\Repositories\SalaRepository;
 use App\Controllers\SalaController;
 
@@ -39,7 +39,7 @@ try {
     $usuarioCtrl = new UsuarioController(new UsuarioRepository($db));
     $funcionCtrl = new FuncionController(new FuncionRepository($db));
     $salaCtrl = new SalaController(new SalaRepository($db));
-    
+
 
     $accion = $_GET['action'] ?? $_POST['action'] ?? null;
 
@@ -63,7 +63,7 @@ try {
         case 'listar_peliculas':
             $respuesta = $peliculaCtrl->listarPeliculas();
             break;
-        
+
         case 'editar_pelicula':
             $respuesta = $peliculaCtrl->editarPelicula($_POST, $_FILES);
             break;
@@ -76,11 +76,11 @@ try {
             $id = (int)($_POST['id'] ?? $inputJSON['id'] ?? 0);
             $respuesta = $peliculaCtrl->eliminarPelicula($id);
             break;
-        
+
         case 'crear_funcion':
             $respuesta = $funcionCtrl->crearFuncion($_POST);
             break;
-        
+
         case 'listar_funciones':
             $respuesta = $funcionCtrl->listarFunciones();
             break;
@@ -101,7 +101,7 @@ try {
         case 'crear_sala':
             $respuesta = $salaCtrl->crearSala($_POST, $_FILES);
             break;
-            
+
         case 'editar_sala':
             $respuesta = $salaCtrl->editarSala($_POST, $_FILES);
             break;
@@ -110,15 +110,15 @@ try {
             $id = (int)($_POST['id'] ?? $inputJSON['id'] ?? 0);
             $respuesta = $salaCtrl->eliminarSala($id);
             break;
-        
+
         case 'cartelera_cajero':
             $respuesta = $funcionCtrl->carteleraCajero();
-            break; 
+            break;
 
         case 'vender_boletos':
             $respuesta = $funcionCtrl->venderBoletos($_POST);
             break;
-            
+
         // --- NUEVAS ACCIONES DEL CLIENTE AÑADIDAS ---
         case 'comprar_cliente':
             $respuesta = $funcionCtrl->comprarBoletosCliente($_POST);
@@ -140,7 +140,6 @@ try {
     }
 
     echo json_encode($respuesta);
-
 } catch (Exception $e) {
     http_response_code(400);
     echo json_encode(["status" => "error", "message" => $e->getMessage()]);
