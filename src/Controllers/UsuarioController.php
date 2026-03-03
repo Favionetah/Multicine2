@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controllers;
@@ -9,7 +10,8 @@ use Exception;
 class UsuarioController {
     public function __construct(
         private UsuarioRepository $repository
-    ) {}
+    ) {
+    }
 
     /**
      * Procesa el Registro de Cliente (US-01)
@@ -41,8 +43,8 @@ class UsuarioController {
             if ($this->repository->crearCliente(compact('CI', 'nombre', 'correo', 'contrasena', 'telefono'))) {
                 return ["status" => "success", "message" => "Cuenta creada con éxito. Ya puedes iniciar sesión."];
             }
-            throw new Exception("Error interno al crear la cuenta.");
 
+            throw new Exception("Error interno al crear la cuenta.");
         } catch (Exception $e) {
             return ["status" => "error", "message" => $e->getMessage()];
         }
@@ -60,36 +62,37 @@ class UsuarioController {
                 throw new Exception("El correo y la contraseña son obligatorios.");
             }
 
-            // Usamos tu método orientado a objetos original
             $usuario = $this->repository->buscarPorCorreo($correo);
 
             if (!$usuario) {
                 throw new Exception("Credenciales incorrectas.");
             }
 
-            // Validamos contra la contraseña encriptada o la plana usando tu getter getContrasena()
-            $passValida = password_verify($contrasenaIngresada, $usuario->getContrasena()) || $contrasenaIngresada === $usuario->getContrasena();
-            
+            $passValida = password_verify($contrasenaIngresada, $usuario->getContrasena())
+                || $contrasenaIngresada === $usuario->getContrasena();
+
             if (!$passValida) {
                 throw new Exception("Credenciales incorrectas.");
             }
 
-            // Iniciar variables de sesión protegiendo que no se dupliquen
+            // Iniciar sesión si no está activa
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
-            
-            // Usamos tus getters originales
+
+            // 🔐 Regenerar ID de sesión para prevenir Session Fixation
+            session_regenerate_id(true);
+
+            // Asignar variables de sesión
             $_SESSION['CI'] = $usuario->getCI();
             $_SESSION['nombre'] = $usuario->getNombre();
             $_SESSION['rol'] = $usuario->getRol();
 
             return [
-                "status" => "success", 
+                "status" => "success",
                 "rol" => $usuario->getRol(),
                 "message" => "Bienvenido " . $usuario->getNombre()
             ];
-
         } catch (Exception $e) {
             return ["status" => "error", "message" => $e->getMessage()];
         }
@@ -99,7 +102,11 @@ class UsuarioController {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+
+        // Limpiar sesión completamente
+        $_SESSION = [];
         session_destroy();
+
         header("Location: index.php");
         exit();
     }

@@ -1,4 +1,17 @@
 <?php
+// Detectar si estamos en HTTPS (en XAMPP normalmente será false)
+$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+
+// Configuración segura de la cookie de sesión
+session_set_cookie_params([
+    'lifetime' => 0,              // Sesión hasta cerrar navegador
+    'path' => '/',
+    'domain' => '',
+    'secure' => $isHttps,         // Solo true si hay HTTPS
+    'httponly' => true,           // Impide acceso desde JS (XSS protection)
+    'samesite' => 'Lax'           // Recomendado para login normal
+]);
+
 session_start();
 // Si el usuario ya inició sesión, lo mandamos a su panel correspondiente
 if (isset($_SESSION['rol'])) {
@@ -7,6 +20,7 @@ if (isset($_SESSION['rol'])) {
     else header("Location: cartelera_cliente.php"); // O como se llame la vista del cliente
     exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
