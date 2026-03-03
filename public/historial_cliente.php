@@ -8,6 +8,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
 <!DOCTYPE html>
 <html lang="es">
 
+
 <head>
     <meta charset="UTF-8">
     <title>Mi Historial - Multicine</title>
@@ -15,11 +16,13 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
 
+
         :root {
             --primary: #00d2d3;
             --dark-bg: #050505;
             --card-bg: #111;
         }
+
 
         * {
             margin: 0;
@@ -28,11 +31,13 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             font-family: 'Montserrat', sans-serif;
         }
 
+
         body {
             background: var(--dark-bg);
             color: white;
             padding-bottom: 50px;
         }
+
 
         header {
             padding: 20px 50px;
@@ -46,12 +51,14 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             z-index: 100;
         }
 
+
         .logo {
             color: var(--primary);
             font-weight: 900;
             font-size: 1.5rem;
             text-decoration: none;
         }
+
 
         .back-btn {
             background: transparent;
@@ -65,16 +72,19 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             font-size: 0.8rem;
         }
 
+
         .back-btn:hover {
             background: white;
             color: black;
         }
+
 
         .container {
             max-width: 1000px;
             margin: 40px auto;
             padding: 0 20px;
         }
+
 
         h1 {
             font-weight: 900;
@@ -84,11 +94,13 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             text-align: center;
         }
 
+
         .ticket-list {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
+
 
         .ticket-card {
             background: var(--card-bg);
@@ -100,14 +112,17 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             transition: border-color 0.3s;
         }
 
+
         .ticket-card:hover {
             border-color: #444;
         }
+
 
         .ticket-poster {
             width: 120px;
             object-fit: cover;
         }
+
 
         .ticket-info {
             padding: 20px;
@@ -117,6 +132,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             justify-content: center;
         }
 
+
         .t-title {
             font-size: 1.2rem;
             font-weight: 900;
@@ -124,6 +140,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             color: var(--primary);
             margin-bottom: 5px;
         }
+
 
         .t-details {
             font-size: 0.8rem;
@@ -133,6 +150,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
+
 
         .code-box {
             background: #1a1a1a;
@@ -145,6 +163,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             gap: 15px;
         }
 
+
         .code-box span {
             font-size: 0.7rem;
             color: #888;
@@ -153,11 +172,13 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             display: block;
         }
 
+
         .code-box strong {
             font-size: 1.5rem;
             color: white;
             letter-spacing: 2px;
         }
+
 
         /* Botón QR */
         .btn-ver-qr {
@@ -177,9 +198,11 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             font-family: 'Montserrat', sans-serif;
         }
 
+
         .btn-ver-qr:hover {
             background: white;
         }
+
 
         /* Modal QR */
         .qr-modal-overlay {
@@ -193,9 +216,11 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             backdrop-filter: blur(8px);
         }
 
+
         .qr-modal-overlay.active {
             display: flex;
         }
+
 
         .qr-modal-box {
             background: #121212;
@@ -209,6 +234,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             box-shadow: 0 0 60px rgba(0, 210, 211, 0.15);
         }
 
+
         .qr-modal-box h3 {
             font-size: 1.1rem;
             text-transform: uppercase;
@@ -217,11 +243,13 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             font-weight: 900;
         }
 
+
         .qr-modal-box .qr-movie {
             font-size: 0.8rem;
             color: #888;
             margin-bottom: 25px;
         }
+
 
         .qr-img-wrapper {
             background: white;
@@ -231,11 +259,13 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             margin-bottom: 20px;
         }
 
+
         .qr-img-wrapper img {
             display: block;
             width: 200px;
             height: 200px;
         }
+
 
         .qr-code-text {
             font-size: 0.75rem;
@@ -245,6 +275,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             margin-bottom: 5px;
         }
 
+
         .qr-ticket-code {
             font-size: 1.4rem;
             font-weight: 900;
@@ -252,6 +283,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             letter-spacing: 3px;
             margin-bottom: 25px;
         }
+
 
         .btn-cerrar-qr {
             background: transparent;
@@ -266,10 +298,12 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             transition: 0.2s;
         }
 
+
         .btn-cerrar-qr:hover {
             background: #222;
             color: white;
         }
+
 
         .qr-close-x {
             position: absolute;
@@ -284,23 +318,28 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             transition: color 0.2s;
         }
 
+
         .qr-close-x:hover {
             color: white;
         }
     </style>
 </head>
 
+
 <body>
+
 
     <header>
         <div class="logo"><i class="fas fa-ticket-alt"></i> MULTICINE</div>
         <a href="cartelera_cliente.php" class="back-btn"><i class="fas fa-arrow-left"></i> VOLVER A CARTELERA</a>
     </header>
 
+
     <div class="container">
         <h1>MIS ENTRADAS</h1>
         <div class="ticket-list" id="historialContainer"></div>
     </div>
+
 
     <!-- Modal QR -->
     <div class="qr-modal-overlay" id="qrModal">
@@ -309,16 +348,20 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             <h3 id="qrModalTitulo">Tu Ticket</h3>
             <p class="qr-movie" id="qrModalPelicula"></p>
 
+
             <div class="qr-img-wrapper">
                 <img id="qrImagen" src="" alt="Código QR">
             </div>
 
+
             <p class="qr-code-text">CÓDIGO DE RETIRO</p>
             <div class="qr-ticket-code" id="qrModalCodigo"></div>
+
 
             <button class="btn-cerrar-qr" onclick="cerrarQR()">CERRAR</button>
         </div>
     </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -327,21 +370,26 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
                 .then(data => {
                     const container = document.getElementById('historialContainer');
 
+
                     if (data.length === 0) {
                         container.innerHTML = '<p style="text-align:center; color:#666; font-size:1.2rem; margin-top:50px;">Aún no tienes entradas compradas.</p>';
                         return;
                     }
 
+
                     data.forEach(ticket => {
                         const horaCorta = ticket.horaInicio.substring(0, 5);
+
 
                         // El codigoQR viene desde la tabla tickets via historial
                         // Si no viene (compras antiguas del cajero), usamos el codigo_ticket
                         const datosQR = ticket.codigoQR || ticket.codigo_ticket;
                         const urlQR = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(datosQR)}&size=200x200&bgcolor=ffffff&color=000000&margin=10`;
 
+
                         const tituloEscape = ticket.titulo.replace(/'/g, "\\'");
                         const codigoEscape = ticket.codigo_ticket.replace(/'/g, "\\'");
+
 
                         container.innerHTML += `
                         <div class="ticket-card">
@@ -370,6 +418,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
                 });
         });
 
+
         function mostrarQR(urlQR, titulo, codigo) {
             document.getElementById('qrImagen').src = urlQR;
             document.getElementById('qrModalTitulo').textContent = 'TU TICKET';
@@ -378,10 +427,12 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
             document.getElementById('qrModal').classList.add('active');
         }
 
+
         function cerrarQR() {
             document.getElementById('qrModal').classList.remove('active');
             document.getElementById('qrImagen').src = ''; // limpia para no parpadear al reabrir
         }
+
 
         // Cerrar al hacer click fuera del box
         document.getElementById('qrModal').addEventListener('click', function(e) {
@@ -389,5 +440,6 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'cliente') {
         });
     </script>
 </body>
+
 
 </html>
