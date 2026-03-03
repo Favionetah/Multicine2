@@ -29,7 +29,6 @@ class FuncionController {
                 return ["status" => "success", "message" => "Función programada con éxito."];
             }
             throw new \Exception("Error al guardar en la base de datos.");
-            
         } catch (\Exception $e) {
             return ["status" => "error", "message" => $e->getMessage()];
         }
@@ -70,7 +69,7 @@ class FuncionController {
             $datosVenta = [
                 'idFuncion' => $datos['idFuncion'],
                 'asientos' => $asientos,
-                'ciCliente' => $datos['ciCliente'] ?? '0' 
+                'ciCliente' => $datos['ciCliente'] ?? '0'
             ];
 
             if ($this->repository->registrarVenta($datosVenta)) {
@@ -108,6 +107,4 @@ class FuncionController {
         $ci = $_SESSION['CI'] ?? '';
         return $this->repository->obtenerHistorialCliente($ci);
     }
-
-    
 }
