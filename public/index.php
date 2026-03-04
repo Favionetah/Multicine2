@@ -223,28 +223,28 @@ if (isset($_SESSION['rol'])) {
             <input type="hidden" name="action" value="registro_cliente">
 
             <div class="input-group">
-                <label>Carnet de Identidad (CI)</label>
+                <label>Carnet de Identidad (CI)*</label>
                 <input type="text" name="CI" required placeholder="Ej. 1234567">
             </div>
 
             <div class="input-group">
-                <label>Nombre Completo</label>
+                <label>Nombre Completo*</label>
                 <input type="text" id="reg_nombre" name="nombre" required placeholder="Ej. Juan Pérez">
             </div>
 
             <div class="input-group" style="display:flex; gap:10px;">
                 <div style="flex:1;">
-                    <label>Teléfono</label>
+                    <label>Teléfono*</label>
                     <input type="number" id="reg_telefono" name="telefono" required placeholder="8 dígitos">
                 </div>
                 <div style="flex:1;">
-                    <label>Correo</label>
+                    <label>Correo*</label>
                     <input type="email" name="correo" required placeholder="tu@email.com">
                 </div>
             </div>
 
             <div class="input-group">
-                <label>Crear Contraseña</label>
+                <label>Crear Contraseña*</label>
                 <input type="password" name="contrasena" required placeholder="Mínimo 6 caracteres">
             </div>
 

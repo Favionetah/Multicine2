@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Repositories;
@@ -20,7 +21,7 @@ class UsuarioRepository {
         $sql = "SELECT * FROM usuarios WHERE correo = :correo LIMIT 1";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':correo' => $correo]);
-        
+
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row) {
@@ -37,7 +38,7 @@ class UsuarioRepository {
     }
 
     /**
-     * Crea un nuevo cliente en la base de datos
+     * Crea un nuevo cliente en la base de datos PREPARED STATEMENTS
      */
     public function crearCliente(array $datos): bool {
         $sql = "INSERT INTO usuarios (CI, nombre, correo, contrasena, telefono, rol) 
