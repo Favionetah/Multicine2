@@ -1,59 +1,190 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+```
+███╗   ███╗██╗   ██╗██╗  ████████╗██╗ ██████╗██╗███╗   ██╗███████╗
+████╗ ████║██║   ██║██║  ╚══██╔══╝██║██╔════╝██║████╗  ██║██╔════╝
+██╔████╔██║██║   ██║██║     ██║   ██║██║     ██║██╔██╗ ██║█████╗
+██║╚██╔╝██║██║   ██║██║     ██║   ██║██║     ██║██║╚██╗██║██╔══╝
+██║ ╚═╝ ██║╚██████╔╝███████╗██║   ██║╚██████╗██║██║ ╚████║███████╗
+╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝   ╚═╝ ╚═════╝╚═╝╚═╝  ╚═══╝╚══════╝
+```
+> 🎬  *Sistema integral de gestión y reservas cinematográficas*
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+## ╔══════════════════════════════════════╗
+## ║         ¿QUÉ ES MULTICINE?          ║
+## ╚══════════════════════════════════════╝
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**MULTICINE** es una plataforma completa para la gestión de cines que
+unifica tres experiencias en una sola solución:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```
+  ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+  │   CLIENTE   │     │   CAJERO    │     │    ADMIN    │
+  │             │     │             │     │             │
+  │  Reserva    │     │  Vende en   │     │  Controla   │
+  │  entradas   │────▶│  taquilla   │────▶│  todo el    │
+  │  desde web  │     │  y aplica   │     │  negocio    │
+  │             │     │  descuentos │     │             │
+  └─────────────┘     └─────────────┘     └─────────────┘
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ╔══════════════════════════════════════╗
+## ║        PROBLEMA QUE RESUELVE        ║
+## ╚══════════════════════════════════════╝
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```
+  ANTES ❌                          DESPUÉS ✅
+  ─────────────────────────         ─────────────────────────
+  Procesos 100% manuales     ──▶    Automatización total
+  Precios inconsistentes     ──▶    Tarifas unificadas
+  Sin datos de ocupación     ──▶    Reportes en tiempo real
+  Web y taquilla separadas   ──▶    Un solo sistema integrado
+  Gestión de empleados caos  ──▶    Roles y permisos claros
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## ╔══════════════════════════════════════╗
+## ║          USUARIOS OBJETIVO          ║
+## ╚══════════════════════════════════════╝
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+  ╭──────────────────┬───────────────────────────────────────╮
+  │  🧑‍💻  CLIENTE    │  Reserva entradas cómodamente desde   │
+  │                  │  la web, elige asientos y paga online. │
+  ├──────────────────┼───────────────────────────────────────┤
+  │  🏦  CAJERO      │  Atiende en taquilla, busca socios,   │
+  │                  │  aplica descuentos e imprime tickets.  │
+  ├──────────────────┼───────────────────────────────────────┤
+  │  🛠️  ADMIN       │  Configura precios, gestiona empleados │
+  │                  │  y analiza reportes de rentabilidad.   │
+  ╰──────────────────┴───────────────────────────────────────╯
+```
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## ╔══════════════════════════════════════════════════════════╗
+## ║       HISTORIAS DE USUARIO  ——  ITERACIÓN 3             ║
+## ╚══════════════════════════════════════════════════════════╝
 
-## Contributing
+```
+  ┌─────────────────────────────────────────────────────────┐
+  │  US-09  │  Descuentos de Lealtad por CI          🟡 MED │
+  ├─────────────────────────────────────────────────────────┤
+  │                                                         │
+  │  "Como cajero, quiero ingresar el CI del cliente        │
+  │   para aplicar descuentos de lealtad en el precio."     │
+  │                                                         │
+  │  ✔  Campo de búsqueda por CI o Número de Socio          │
+  │  ✔  Descuento aplicado automáticamente al total         │
+  │  ✔  Resumen del ahorro visible en pantalla de cobro     │
+  │                                                         │
+  │                               Estado: [██████████] ✅   │
+  └─────────────────────────────────────────────────────────┘
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+  ┌─────────────────────────────────────────────────────────┐
+  │  US-10  │  Impresión de Ticket Físico            🟡 MED │
+  ├─────────────────────────────────────────────────────────┤
+  │                                                         │
+  │  "Como cajero, quiero imprimir un ticket físico         │
+  │   por requerimiento fiscal o solicitud del cliente."    │
+  │                                                         │
+  │  ✔  Botón de impresión tras confirmar la venta          │
+  │  ✔  Ticket incluye: Cine, Película, Sala,               │
+  │     Asientos y Código de Acceso                         │
+  │  ✔  Re-impresión disponible ante fallas técnicas        │
+  │                                                         │
+  │                               Estado: [██████████] ✅   │
+  └─────────────────────────────────────────────────────────┘
 
-## Code of Conduct
+  ┌─────────────────────────────────────────────────────────┐
+  │  US-13  │  Tarifas Diferenciadas y Promociones   🔴 ALT │
+  ├─────────────────────────────────────────────────────────┤
+  │                                                         │
+  │  "Como admin, quiero configurar tarifas Niño/Adulto     │
+  │   y promociones por días específicos."                  │
+  │                                                         │
+  │  ✔  Formulario de precios base por categoría de edad    │
+  │  ✔  Precios especiales por día (ej. Miércoles)          │
+  │  ✔  Cambios reflejados en Web y Taquilla al instante    │
+  │                                                         │
+  │                               Estado: [██████████] ✅   │
+  └─────────────────────────────────────────────────────────┘
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+  ┌─────────────────────────────────────────────────────────┐
+  │  US-14  │  Reportes de Ocupación y Recaudación   🟡 MED │
+  ├─────────────────────────────────────────────────────────┤
+  │                                                         │
+  │  "Como admin, quiero generar reportes diarios de        │
+  │   ocupación y recaudación para analizar rentabilidad."  │
+  │                                                         │
+  │  ✔  Filtros por fecha: día / semana / mes               │
+  │  ✔  % de ocupación por sala y película                  │
+  │  ✔  Exportación a Excel o PDF                           │
+  │                                                         │
+  │                               Estado: [██████████] ✅   │
+  └─────────────────────────────────────────────────────────┘
 
-## Security Vulnerabilities
+  ┌─────────────────────────────────────────────────────────┐
+  │  US-15  │  Gestión de Empleados y Permisos       🟡 MED │
+  ├─────────────────────────────────────────────────────────┤
+  │                                                         │
+  │  "Como admin, quiero gestionar cuentas de empleados     │
+  │   y sus permisos para proteger el sistema."             │
+  │                                                         │
+  │  ✔  Crear usuarios con roles: Cajero / Admin            │
+  │  ✔  Desactivar cuentas de empleados inactivos           │
+  │  ✔  Log de actividad por usuario                        │
+  │                                                         │
+  │                               Estado: [██████████] ✅   │
+  └─────────────────────────────────────────────────────────┘
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## ╔══════════════════════════════════════╗
+## ║         PROGRESO DEL SPRINT         ║
+## ╚══════════════════════════════════════╝
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+  Iteración 3  ──────────────────────────────────  100%
+
+  US-09  Descuentos de lealtad       [██████████]  ✅
+  US-10  Impresión de tickets        [██████████]  ✅
+  US-13  Tarifas y promociones       [██████████]  ✅
+  US-14  Reportes de ocupación       [██████████]  ✅
+  US-15  Gestión de empleados        [██████████]  ✅
+
+  Completadas: 5 / 5   ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  🎉
+```
+
+---
+
+## ╔══════════════════════════════════════╗
+## ║           EQUIPO DE TRABAJO         ║
+## ╚══════════════════════════════════════╝
+
+```
+  ╭─────────────────────────────────────────╮
+  │           🎬  PROYECTO EDDYS            │
+  ├─────────────────────────────────────────┤
+  │                                         │
+  │  👤  Michael Gonzalo Salvatierra Lopez  │
+  │  👤  Favio Estefano Sandy Gonzales      │
+  │  👤  Eddy Limber Vargas Apaza           │
+  │  👤  Cristhian Alan Vega Ramirez        │
+  │  👤  Diego Joaquin Yampasi Morales      │
+  │                                         │
+  ╰─────────────────────────────────────────╯
+```
+
+---
+
+```
+  ════════════════════════════════════════════════════════════
+    MULTICINE  —  Llevando la experiencia del cine al
+                  siguiente nivel  🎥🍿
+  ════════════════════════════════════════════════════════════
+```
